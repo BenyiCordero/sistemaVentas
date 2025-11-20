@@ -9,7 +9,6 @@ public record TrabajadorRegisterRequest(
         String segundoApellido,
         String numeroTelefono,
         //Trabajador
-        Rol rol,
         String email,
         String password
 ) {
