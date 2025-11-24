@@ -16,7 +16,7 @@ public class TrabajadorController {
     }
 
     @GetMapping("/getByEmail")
-    public ResponseEntity<?> getByEmail(@RequestBody String email) {
+    public ResponseEntity<?> getByEmail(@RequestParam String email) {
         return ResponseEntity.status(HttpStatus.OK).body(trabajadorService.findByEmail(email));
     }
 
