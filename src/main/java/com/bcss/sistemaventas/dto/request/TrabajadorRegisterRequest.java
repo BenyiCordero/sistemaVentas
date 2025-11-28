@@ -1,6 +1,6 @@
 package com.bcss.sistemaventas.dto.request;
 
-import com.bcss.sistemaventas.auth.Rol;
+import com.bcss.sistemaventas.domain.Rol;
 
 public record TrabajadorRegisterRequest(
         //Persona
