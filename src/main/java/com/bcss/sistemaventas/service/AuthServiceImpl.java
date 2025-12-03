@@ -1,7 +1,7 @@
 package com.bcss.sistemaventas.service;
 
-import com.bcss.sistemaventas.auth.Rol;
-import com.bcss.sistemaventas.auth.TokenType;
+import com.bcss.sistemaventas.domain.Rol;
+import com.bcss.sistemaventas.domain.TokenType;
 import com.bcss.sistemaventas.domain.Persona;
 import com.bcss.sistemaventas.domain.Token;
 import com.bcss.sistemaventas.domain.Trabajador;

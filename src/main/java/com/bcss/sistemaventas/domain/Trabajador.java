@@ -1,6 +1,6 @@
 package com.bcss.sistemaventas.domain;
 
-import com.bcss.sistemaventas.auth.Rol;
+import com.bcss.sistemaventas.domain.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
