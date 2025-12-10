@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers("/client/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/product/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/productImage/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/credito-pagos/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
