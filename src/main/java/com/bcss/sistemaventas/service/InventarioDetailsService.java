@@ -15,4 +15,5 @@ public interface InventarioDetailsService {
     void delete(Integer id);
     List<InventarioDetails> getByInventario(Integer idInventario);
     List<InventarioDetails> getByProducto(Integer idProducto);
+    Double getTotalComprasMes();
 }

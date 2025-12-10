@@ -17,7 +17,11 @@ public class TrabajadorController {
 
     @GetMapping("/getByEmail")
     public ResponseEntity<?> getByEmail(@RequestParam String email) {
-        return ResponseEntity.status(HttpStatus.OK).body(trabajadorService.findByEmail(email));
+        var trabajador = trabajadorService.findByEmail(email);
+        if (trabajador.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trabajador no encontrado con email: " + email);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(trabajador.get());
     }
 
     @GetMapping("/getById/{id}")

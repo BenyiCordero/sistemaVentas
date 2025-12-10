@@ -62,4 +62,9 @@ public class InventarioDetailsController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getByProducto(idProducto));
     }
 
+    @GetMapping("/total-mes")
+    public ResponseEntity<?> getTotalMes() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalComprasMes());
+    }
+
 }
