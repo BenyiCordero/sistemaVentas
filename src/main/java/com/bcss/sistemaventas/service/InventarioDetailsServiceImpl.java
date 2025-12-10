@@ -117,4 +117,9 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
         else return repository.findByProductoIdProductoAndDisponibleTrue(idProducto);
     }
 
+    @Override
+    public Double getTotalComprasMes() {
+        return repository.sumTotalMesActual();
+    }
+
 }

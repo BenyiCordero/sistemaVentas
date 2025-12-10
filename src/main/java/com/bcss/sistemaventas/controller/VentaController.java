@@ -62,4 +62,9 @@ public class VentaController {
     public ResponseEntity<?> getByTrabajador(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getByTrabajador(id));
     }
+
+    @GetMapping("/total-mes")
+    public ResponseEntity<?> getTotalMes() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalVentasMes());
+    }
 }

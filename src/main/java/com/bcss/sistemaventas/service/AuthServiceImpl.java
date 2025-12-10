@@ -120,7 +120,7 @@ public class AuthServiceImpl implements AuthService {
             return null;
         }
 
-        String accessToken = tokenService.generateRefreshToken(trabajador);
+        String accessToken = tokenService.generateToken(trabajador);
         removeAllUserTokens(trabajador);
         saveUserToken(trabajador, accessToken);
 

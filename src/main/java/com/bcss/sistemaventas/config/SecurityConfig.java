@@ -43,11 +43,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:5501"));
-                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
-                    configuration.setAllowedHeaders(List.of("*","ngrok-skip-browser-warning"));
-                    configuration.setExposedHeaders(List.of("Authorization"));
+                    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8081", "http://localhost:5500"));
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+                    configuration.setExposedHeaders(Arrays.asList("Authorization"));
                     configuration.setAllowCredentials(true);
                     return configuration;
                 }))
@@ -60,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers("/product/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/productImage/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/credito-pagos/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/inventory/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

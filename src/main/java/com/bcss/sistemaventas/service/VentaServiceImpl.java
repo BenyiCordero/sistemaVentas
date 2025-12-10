@@ -163,4 +163,9 @@ public class VentaServiceImpl implements VentaService {
         return repository.save(venta);
     }
 
+    @Override
+    public Double getTotalVentasMes() {
+        return repository.sumTotalMesActual();
+    }
+
 }
