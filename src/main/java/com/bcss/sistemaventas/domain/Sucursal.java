@@ -1,5 +1,6 @@
 package com.bcss.sistemaventas.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,9 +26,11 @@ public class Sucursal {
     private String sucursalKey;
     @Column(nullable = false)
     private Boolean activo;
-    @OneToMany(mappedBy = "sucursal")
+    @OneToMany(mappedBy = "sucursal", fetch = FetchType.LAZY)
+    @JsonManagedReference("sucursal-trabajadores")
     private List<Trabajador> trabajadores;
-    @OneToOne(mappedBy = "sucursal")
+    @OneToOne(mappedBy = "sucursal", fetch = FetchType.LAZY)
+    @JsonManagedReference("sucursal-inventario")
     private Inventario inventario;
 }
 

@@ -1,6 +1,7 @@
 package com.bcss.sistemaventas.domain;
 
 import com.bcss.sistemaventas.domain.Rol;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +29,9 @@ public class Trabajador {
     @OneToOne
     @JoinColumn(name = "id_persona")
     private Persona persona;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sucursal")
+    @JsonBackReference("sucursal-trabajadores")
     private Sucursal sucursal;
 
 }
