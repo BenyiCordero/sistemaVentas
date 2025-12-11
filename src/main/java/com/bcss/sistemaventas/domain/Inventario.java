@@ -1,5 +1,6 @@
 package com.bcss.sistemaventas.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +28,9 @@ public class Inventario {
     private LocalDate fechaCreacion;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idSucursal", referencedColumnName = "idSucursal")
+    @JsonBackReference("sucursal-inventario")
     private Sucursal sucursal;
-    @OneToMany(mappedBy = "inventario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "inventario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InventarioDetails> detalles;
 
 }
