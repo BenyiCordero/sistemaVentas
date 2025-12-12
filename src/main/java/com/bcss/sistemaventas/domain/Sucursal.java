@@ -1,6 +1,7 @@
 package com.bcss.sistemaventas.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "Sucursal")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idSucursal")
 public class Sucursal {
 
     @Id
@@ -27,10 +29,8 @@ public class Sucursal {
     @Column(nullable = false)
     private Boolean activo;
     @OneToMany(mappedBy = "sucursal", fetch = FetchType.LAZY)
-    @JsonManagedReference("sucursal-trabajadores")
     private List<Trabajador> trabajadores;
     @OneToOne(mappedBy = "sucursal", fetch = FetchType.LAZY)
-    @JsonManagedReference("sucursal-inventario")
     private Inventario inventario;
 }
 

@@ -26,7 +26,7 @@ public class InventarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(inventario));
     }
 
-    @GetMapping("/sucursalId")
+    @GetMapping("/{sucursalId}")
     public ResponseEntity<?> getBySucursal(@PathVariable Integer sucursalId) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getInventarioPerSucursal(sucursalId));
     }
