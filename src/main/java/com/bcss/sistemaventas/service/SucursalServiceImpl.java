@@ -1,9 +1,13 @@
 package com.bcss.sistemaventas.service;
 
 import com.bcss.sistemaventas.domain.Sucursal;
+import com.bcss.sistemaventas.domain.Trabajador;
+import com.bcss.sistemaventas.dto.request.SucursalPerUsuarioRequest;
+import com.bcss.sistemaventas.dto.response.SucursalPerUsuarioResponse;
 import com.bcss.sistemaventas.exception.EmptyObjectException;
 import com.bcss.sistemaventas.exception.NotFoundException;
 import com.bcss.sistemaventas.repository.SucursalRepository;
+import com.bcss.sistemaventas.repository.TrabajadorRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +18,12 @@ import java.util.Optional;
 public class SucursalServiceImpl implements SucursalService {
 
     private final SucursalRepository sucursalRepository;
+    private final TrabajadorRepository trabajadorRepository;
 
-    public SucursalServiceImpl(SucursalRepository sucursalRepository) {
+    public SucursalServiceImpl(SucursalRepository sucursalRepository,
+                               TrabajadorRepository trabajadorRepository) {
         this.sucursalRepository = sucursalRepository;
+        this.trabajadorRepository = trabajadorRepository;
     }
 
 
@@ -81,5 +88,24 @@ public class SucursalServiceImpl implements SucursalService {
         if (!sucursales.isEmpty()) return sucursales;
         else throw new EmptyObjectException("No hay sucursales para mostrar");
     }
+
+    @Override
+    public SucursalPerUsuarioResponse getSucursalPerUsuario(SucursalPerUsuarioRequest request) {
+
+        Trabajador trabajador = trabajadorRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
+
+        Sucursal s = trabajador.getSucursal();
+
+        if (s == null) {
+            throw new RuntimeException("El trabajador no tiene sucursal");
+        }
+
+        return new SucursalPerUsuarioResponse(
+                s.getIdSucursal()
+        );
+    }
+
+
 
 }
