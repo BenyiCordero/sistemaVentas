@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 .requestMatchers("/productImage/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/credito-pagos/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/inventory/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/inventoryDetails/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/gasto/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
