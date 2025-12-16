@@ -72,8 +72,8 @@ public class VentaDetailsServiceImpl implements VentaDetailsService {
 
     @Override
     public VentaDetails update(Integer id, VentaDetailsRequest ventaDetailsRequest) {
-        Optional<VentaDetails> optionalExisting = repository.findById(id);
-        VentaDetails existing = optionalExisting.get();
+        VentaDetails existing = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Detalle no encontrado con id: " + id));
 
         Producto producto = productoRepository.findById(ventaDetailsRequest.idProducto())
                 .orElseThrow(() -> new NotFoundException("Producto no encontrado con id: " + ventaDetailsRequest.idProducto()));
@@ -81,17 +81,16 @@ public class VentaDetailsServiceImpl implements VentaDetailsService {
         Venta venta = ventaRepository.findById(ventaDetailsRequest.idVenta())
                 .orElseThrow(() -> new NotFoundException("Venta no encontrada con id: " + ventaDetailsRequest.idVenta()));
 
-        existing = VentaDetails.builder()
-                .idVentaDetails(id)
-                .producto(producto)
-                .venta(venta)
-                .cantidad(ventaDetailsRequest.cantidad())
-                .precio(ventaDetailsRequest.precio())
-                .subtotal(ventaDetailsRequest.subtotal())
-                .build();
+        // actualizar el objeto existente
+        existing.setProducto(producto);
+        existing.setVenta(venta);
+        existing.setCantidad(ventaDetailsRequest.cantidad());
+        existing.setPrecio(ventaDetailsRequest.precio());
+        existing.setSubtotal(ventaDetailsRequest.subtotal());
 
         return repository.save(existing);
     }
+
 
     @Override
     public void delete(Integer id) {

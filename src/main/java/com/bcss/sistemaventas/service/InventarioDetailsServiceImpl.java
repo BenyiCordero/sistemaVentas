@@ -76,24 +76,20 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
     }
 
     @Override
-    public InventarioDetails update(Integer id, InventarioDetailsRequest inventarioDetails) {
-        InventarioDetails detalle = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("No se encontró detalle con id " + id));
+    public InventarioDetails update(Integer id, InventarioDetailsRequest request) {
 
-        Inventario inventario = inventarioRepository.findById(inventarioDetails.idInventario())
-                .orElseThrow(() -> new NotFoundException("No se encontró Inventario con id " + inventarioDetails.idInventario()));
+        InventarioDetails existing = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(
+                        "Inventario detalle no encontrado con id: " + id
+                ));
 
-        Producto producto = productoRepository.findById(inventarioDetails.idProducto())
-                .orElseThrow(() -> new NotFoundException("No se encontró Producto con id " + inventarioDetails.idProducto()));
+        existing.setCantidad(request.cantidad());
+        existing.setEstado(request.estado());
+        existing.setDisponible(request.disponible());
 
-        detalle.setCantidad(inventarioDetails.cantidad());
-        detalle.setEstado(inventarioDetails.estado());
-        detalle.setDisponible(inventarioDetails.disponible());
-        detalle.setInventario(inventario);
-        detalle.setProducto(producto);
-
-        return repository.save(detalle);
+        return repository.save(existing);
     }
+
 
     @Override
     public void delete(Integer id) {

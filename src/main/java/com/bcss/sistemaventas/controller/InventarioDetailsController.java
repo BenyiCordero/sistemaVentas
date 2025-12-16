@@ -43,6 +43,8 @@ public class InventarioDetailsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody InventarioDetailsRequest inventarioDetails) {
+        System.out.println("Update InventarioDetail id: " + id);
+        System.out.println("DTO => " + inventarioDetails);
         return ResponseEntity.status(HttpStatus.OK).body(service.update(id, inventarioDetails));
     }
 
