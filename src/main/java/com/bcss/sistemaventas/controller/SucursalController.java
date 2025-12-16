@@ -1,6 +1,7 @@
 package com.bcss.sistemaventas.controller;
 
 import com.bcss.sistemaventas.domain.Sucursal;
+import com.bcss.sistemaventas.dto.request.SucursalPerUsuarioRequest;
 import com.bcss.sistemaventas.dto.request.SucursalRequest;
 import com.bcss.sistemaventas.service.SucursalService;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,13 @@ public class SucursalController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         sucursalService.deleteSucursalById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/getByUsuario")
+    public ResponseEntity<?> getByUsuario(@RequestBody SucursalPerUsuarioRequest request) {
+        return ResponseEntity.ok(
+                sucursalService.getSucursalPerUsuario(request)
+        );
     }
 
 }

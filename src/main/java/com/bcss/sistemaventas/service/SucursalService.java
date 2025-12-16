@@ -1,6 +1,8 @@
 package com.bcss.sistemaventas.service;
 
 import com.bcss.sistemaventas.domain.Sucursal;
+import com.bcss.sistemaventas.dto.request.SucursalPerUsuarioRequest;
+import com.bcss.sistemaventas.dto.response.SucursalPerUsuarioResponse;
 
 import java.util.List;
 
@@ -13,4 +15,5 @@ public interface SucursalService {
     void deleteSucursalById(Integer id);
     List<Sucursal> getAllActive();
     List<Sucursal> getAllInactive();
+    SucursalPerUsuarioResponse getSucursalPerUsuario(SucursalPerUsuarioRequest email);
 }
