@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/sucursal")
+@RequestMapping("/api/sucursal")
 public class SucursalController {
 
     private final SucursalService sucursalService;

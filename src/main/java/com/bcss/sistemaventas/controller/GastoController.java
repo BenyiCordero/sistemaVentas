@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gasto")
+@RequestMapping("api//gasto")
 public class GastoController {
 
     private final GastoService gastoService;

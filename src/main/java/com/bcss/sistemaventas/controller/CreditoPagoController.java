@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/credito-pagos")
+@RequestMapping("api//credito-pagos")
 @RequiredArgsConstructor
 public class CreditoPagoController {
 
