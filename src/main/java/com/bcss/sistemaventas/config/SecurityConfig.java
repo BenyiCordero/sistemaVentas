@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://127.0.0.1:8081", "http://localhost:5500"));
+                    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://143.110.201.186"));
                     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
                     configuration.setAllowedHeaders(Arrays.asList("*"));
                     configuration.setExposedHeaders(Arrays.asList("Authorization"));
@@ -51,7 +51,7 @@ public class SecurityConfig {
                     return configuration;
                 }))
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("//auth/**").permitAll()
+                        req.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/api/**").hasAnyRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
