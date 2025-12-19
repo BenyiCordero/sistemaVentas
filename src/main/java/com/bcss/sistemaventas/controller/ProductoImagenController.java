@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/productos/{idProducto}/imagenes")
+@RequestMapping("/api/productos/{idProducto}/imagenes")
 @RequiredArgsConstructor
 public class ProductoImagenController {
 
