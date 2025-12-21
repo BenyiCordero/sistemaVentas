@@ -41,5 +41,7 @@ public class Venta {
     private EnumEstadoVenta estado;
     @Column(nullable = false)
     private String notas;
+    @Column(nullable = false)
+    private String metodoPago;
 }
 
