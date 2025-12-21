@@ -1,5 +1,6 @@
 package com.bcss.sistemaventas.dto.request;
 
+
 public record VentaRequest(
         Integer idSucursal,
         Integer idCliente,
@@ -7,6 +8,7 @@ public record VentaRequest(
         Double totalVenta,
         Double descuento,
         Double impuesto,
-        String notas
+        String notas,
+        String metodoPago
 ) {
 }
