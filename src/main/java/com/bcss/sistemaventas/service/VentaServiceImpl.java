@@ -37,7 +37,6 @@ public class VentaServiceImpl implements VentaService {
         List<Venta> ventas;
         if (estado != null) ventas = repository.findByEstado(estado);
         else ventas = repository.findAll();
-        if (ventas.isEmpty()) throw new NotFoundException("No hay ventas para mostrar");
         return ventas;
     }
 
