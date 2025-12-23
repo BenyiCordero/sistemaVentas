@@ -17,5 +17,5 @@ public interface VentaService {
     List<Venta> getByCliente(Integer idCliente);
     List<Venta> getByTrabajador(Integer idTrabajador);
     Venta changeStatus(Integer id, EnumEstadoVenta estado);
-    Double getTotalVentasMes();
+    Float getTotalVentasMes(Integer idSucursal);
 }

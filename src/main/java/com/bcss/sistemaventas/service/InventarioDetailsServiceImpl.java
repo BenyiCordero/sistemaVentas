@@ -114,8 +114,8 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
     }
 
     @Override
-    public Double getTotalComprasMes() {
-        return repository.sumTotalMesActual();
+    public Float getTotalComprasMes(Integer idSucursal) {
+        return repository.sumTotalMesActual(idSucursal);
     }
 
 }

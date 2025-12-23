@@ -168,8 +168,8 @@ public class VentaServiceImpl implements VentaService {
     }
 
     @Override
-    public Double getTotalVentasMes() {
-        return repository.sumTotalMesActual();
+    public Float getTotalVentasMes(Integer idSucursal) {
+        return repository.sumTotalMesActual(idSucursal);
     }
 
 }
