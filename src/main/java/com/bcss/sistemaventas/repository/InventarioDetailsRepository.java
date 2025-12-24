@@ -11,6 +11,7 @@ import java.util.List;
 public interface InventarioDetailsRepository extends JpaRepository<InventarioDetails, Integer> {
     List<InventarioDetails> findByProductoIdProductoAndDisponibleTrue(Integer idProducto);
     List<InventarioDetails> findByInventarioIdInventarioAndDisponibleTrue(Integer idInventario);
+    List<InventarioDetails> findByInventarioIdInventario(Integer idInventario);
     List<InventarioDetails> findByDisponible(Boolean disponible);
     @Query("SELECT COALESCE(SUM(p.costo), 0) " +
             "FROM Producto p " +

@@ -105,7 +105,7 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
     @Override
     public List<InventarioDetails> getByInventario(Integer idInventario) {
         if (!inventarioRepository.findById(idInventario).isPresent()) throw new NotFoundException("Inventario no encontrado");
-        else return repository.findByInventarioIdInventarioAndDisponibleTrue(idInventario);
+        else return repository.findByInventarioIdInventario(idInventario);
     }
 
     @Override
