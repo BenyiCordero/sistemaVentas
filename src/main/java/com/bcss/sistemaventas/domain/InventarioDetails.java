@@ -21,6 +21,8 @@ public class InventarioDetails {
     private Integer idDetalle;
     @Column(nullable = false)
     private Integer cantidad;
+    @Column(nullable = false)
+    private String metodoPago;
     @Column(nullable = false, length = 60)
     private String estado;
     @Column(nullable = false)
