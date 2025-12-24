@@ -31,7 +31,7 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
     @Override
     public List<InventarioDetails> getAll() {
         List<InventarioDetails> inventarioDetailsList = repository.findAll();
-        if (inventarioDetailsList.isEmpty()) throw new NotFoundException("No hay inventarios para mostrar");
+        if (inventarioDetailsList.isEmpty()) throw new NotFoundException("No hay productos en el inventario para mostrar");
         else return inventarioDetailsList;
     }
 
@@ -65,6 +65,7 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
 
         InventarioDetails detalle = InventarioDetails.builder()
                 .cantidad(inventaioDetails.cantidad())
+                .metodoPago(inventaioDetails.metodoPago())
                 .estado(inventaioDetails.estado())
                 .disponible(inventaioDetails.disponible())
                 .fechaAgregado(LocalDate.now())
@@ -104,7 +105,7 @@ public class InventarioDetailsServiceImpl implements InventarioDetailsService {
     @Override
     public List<InventarioDetails> getByInventario(Integer idInventario) {
         if (!inventarioRepository.findById(idInventario).isPresent()) throw new NotFoundException("Inventario no encontrado");
-        else return repository.findByInventarioIdInventarioAndDisponibleTrue(idInventario);
+        else return repository.findByInventarioIdInventario(idInventario);
     }
 
     @Override
