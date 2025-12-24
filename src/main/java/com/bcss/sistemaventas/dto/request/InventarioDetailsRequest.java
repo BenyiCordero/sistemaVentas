@@ -5,6 +5,7 @@ public record InventarioDetailsRequest(
         String estado,
         Boolean disponible,
         Integer idProducto,
-        Integer idInventario
+        Integer idInventario,
+        String metodoPago
 ) {
 }
