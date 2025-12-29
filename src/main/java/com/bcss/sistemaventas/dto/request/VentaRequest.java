@@ -9,6 +9,7 @@ public record VentaRequest(
         Double descuento,
         Double impuesto,
         String notas,
-        String metodoPago
+        String metodoPago,
+        String tipoVenta
 ) {
 }

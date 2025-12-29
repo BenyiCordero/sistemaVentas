@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/tarjeta")
+@RequestMapping("/api/tarjeta")
 public class TarjetaController {
 
     private final TarjetaService tarjetaService;

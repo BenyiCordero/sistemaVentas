@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/credito/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/gasto/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/inventoryDetails/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/api/tarjeta/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/product/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/sucursal/**").hasAnyRole("ADMIN")
                                 .requestMatchers("/api/worker/**").hasAnyRole("ADMIN")

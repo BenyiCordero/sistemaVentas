@@ -69,6 +69,7 @@ public class VentaServiceImpl implements VentaService {
                 .notas(request.notas())
                 .metodoPago(request.metodoPago())
                 .estado(EnumEstadoVenta.PAGADA)
+                .tipoVenta(request.tipoVenta())
                 .build();
 
         return repository.save(venta);
