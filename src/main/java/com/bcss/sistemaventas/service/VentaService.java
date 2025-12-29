@@ -18,4 +18,8 @@ public interface VentaService {
     List<Venta> getByTrabajador(Integer idTrabajador);
     Venta changeStatus(Integer id, EnumEstadoVenta estado);
     Float getTotalVentasMes(Integer idSucursal);
+    Float getTotalVentasContadoMes(Integer idSucursal);
+    Float getTotalVentasCreditoMes(Integer idSucursal);
+    Float getTotalPagosCreditosMes(Integer idSucursal);
+    Float getTotalIngresoMes(Integer idSucursal);
 }

@@ -34,11 +34,34 @@ public class Credito {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist
+@PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
         if (tasaInteres == null) tasaInteres = 0.0;
         if (plazoMeses == null) plazoMeses = 0;
         if (estado == null) estado = EnumEstadoCredito.ACTIVO;
+    }
+
+    public boolean puedeRecibirPagos() {
+        return estado == EnumEstadoCredito.ACTIVO && saldo > 0;
+    }
+
+    public boolean estaVencido() {
+        return fechaVencimiento != null && fechaVencimiento.isBefore(LocalDate.now()) && saldo > 0;
+    }
+
+    public void aplicarPago(Double montoPago) {
+        if (montoPago <= 0) {
+            throw new IllegalArgumentException("El monto del pago debe ser mayor a 0");
+        }
+        if (montoPago > saldo) {
+            throw new IllegalArgumentException("El monto del pago excede el saldo del crédito");
+        }
+        
+        saldo -= montoPago;
+        if (saldo <= 0) {
+            saldo = 0.0;
+            estado = EnumEstadoCredito.PAGADO;
+        }
     }
 }

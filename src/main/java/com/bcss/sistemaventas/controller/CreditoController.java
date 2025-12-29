@@ -4,6 +4,7 @@ import com.bcss.sistemaventas.dto.response.CreditoResponse;
 import com.bcss.sistemaventas.dto.response.CreditoListResponse;
 import com.bcss.sistemaventas.dto.request.CreditoRequest;
 import com.bcss.sistemaventas.dto.request.EstadoCreditoRequest;
+import com.bcss.sistemaventas.dto.request.PagoCreditoRequest;
 import com.bcss.sistemaventas.service.CreditoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -72,10 +73,28 @@ public class CreditoController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{idCredito}")
+@DeleteMapping("/{idCredito}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminarCredito(@PathVariable Integer idCredito) {
         creditoService.eliminarCredito(idCredito);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/pago")
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'VENDEDOR')")
+    public ResponseEntity<CreditoResponse> procesarPagoCredito(@Valid @RequestBody PagoCreditoRequest request) {
+        CreditoResponse response = creditoService.procesarPagoCredito(
+            request.idCredito(), 
+            request.monto(), 
+            request.metodoPago()
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/vencidos/sucursal/{idSucursal}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE')")
+    public ResponseEntity<List<CreditoResponse>> obtenerCreditosVencidosPorSucursal(@PathVariable Integer idSucursal) {
+        List<CreditoResponse> response = creditoService.obtenerCreditosVencidosPorSucursal(idSucursal);
+        return ResponseEntity.ok(response);
     }
 }

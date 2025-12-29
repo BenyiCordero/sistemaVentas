@@ -3,6 +3,7 @@ package com.bcss.sistemaventas.controller;
 import com.bcss.sistemaventas.domain.EnumEstadoVenta;
 import com.bcss.sistemaventas.dto.request.EstadoVentaRequest;
 import com.bcss.sistemaventas.dto.request.VentaRequest;
+import com.bcss.sistemaventas.dto.response.EstadisticasIngresoResponse;
 import com.bcss.sistemaventas.service.VentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +64,48 @@ public class VentaController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getByTrabajador(id));
     }
 
-    @GetMapping("/total-mes/{idSucursal}")
+@GetMapping("/total-mes/{idSucursal}")
     public ResponseEntity<?> getTotalMes(@PathVariable Integer idSucursal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getTotalVentasMes(idSucursal));
+    }
+
+    @GetMapping("/total-contado-mes/{idSucursal}")
+    public ResponseEntity<?> getTotalContadoMes(@PathVariable Integer idSucursal) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalVentasContadoMes(idSucursal));
+    }
+
+    @GetMapping("/total-credito-mes/{idSucursal}")
+    public ResponseEntity<?> getTotalCreditoMes(@PathVariable Integer idSucursal) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalVentasCreditoMes(idSucursal));
+    }
+
+    @GetMapping("/pagos-creditos-mes/{idSucursal}")
+    public ResponseEntity<?> getPagosCreditosMes(@PathVariable Integer idSucursal) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalPagosCreditosMes(idSucursal));
+    }
+
+    @GetMapping("/ingreso-total-mes/{idSucursal}")
+    public ResponseEntity<?> getIngresoTotalMes(@PathVariable Integer idSucursal) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getTotalIngresoMes(idSucursal));
+    }
+
+    @GetMapping("/estadisticas-completas-mes/{idSucursal}")
+    public ResponseEntity<?> getEstadisticasCompletasMes(@PathVariable Integer idSucursal) {
+        Float totalVentas = service.getTotalVentasMes(idSucursal);
+        Float ventasContado = service.getTotalVentasContadoMes(idSucursal);
+        Float ventasCredito = service.getTotalVentasCreditoMes(idSucursal);
+        Float pagosCreditos = service.getTotalPagosCreditosMes(idSucursal);
+        Float ingresoTotal = service.getTotalIngresoMes(idSucursal);
+        
+        EstadisticasIngresoResponse response = new EstadisticasIngresoResponse(
+            totalVentas,
+            ventasContado,
+            ventasCredito,
+            pagosCreditos,
+            ingresoTotal,
+            "Mes actual"
+        );
+        
+        return ResponseEntity.ok(response);
     }
 }

@@ -8,6 +8,8 @@ import com.bcss.sistemaventas.dto.request.CreditoPagoRequest;
 import com.bcss.sistemaventas.domain.CreditoPago;
 import com.bcss.sistemaventas.domain.Credito;
 import com.bcss.sistemaventas.domain.Pago;
+import com.bcss.sistemaventas.domain.EnumEstadoCredito;
+import com.bcss.sistemaventas.domain.EnumMetodoPago;
 import com.bcss.sistemaventas.repository.CreditoPagoRepository;
 import com.bcss.sistemaventas.repository.CreditoRepository;
 import com.bcss.sistemaventas.repository.PagoRepository;
@@ -50,6 +52,16 @@ public class CreditoPagoServiceImpl implements CreditoPagoService {
             }
         }
 
+// Validar que el crédito esté activo
+        if (credito.getEstado() != EnumEstadoCredito.ACTIVO) {
+            throw new RepeatedException("El crédito no está activo. Estado actual: " + credito.getEstado());
+        }
+        
+        // Validar que el monto del pago no exceda el saldo
+        if (request.monto().doubleValue() > credito.getSaldo()) {
+            throw new RepeatedException("El monto del pago (" + request.monto() + ") excede el saldo del crédito (" + credito.getSaldo() + ")");
+        }
+
         CreditoPago creditoPago = CreditoPago.builder()
                 .credito(credito)
                 .pago(pago)
@@ -57,6 +69,19 @@ public class CreditoPagoServiceImpl implements CreditoPagoService {
                 .build();
 
         CreditoPago savedCreditoPago = creditoPagoRepository.save(creditoPago);
+        
+        // Actualizar el saldo del crédito
+        double nuevoSaldo = credito.getSaldo() - request.monto().doubleValue();
+        credito.setSaldo(nuevoSaldo);
+        
+        // Si el saldo es 0, cambiar el estado a PAGADO
+        if (nuevoSaldo <= 0) {
+            credito.setEstado(EnumEstadoCredito.PAGADO);
+            credito.setSaldo(0.0);
+        }
+        
+        creditoRepository.save(credito);
+        
         return creditoPagoMapper.toResponse(savedCreditoPago);
     }
 
@@ -169,9 +194,55 @@ public class CreditoPagoServiceImpl implements CreditoPagoService {
         creditoPagoRepository.deleteById(id);
     }
 
-    @Override
+@Override
     @Transactional(readOnly = true)
     public boolean existeCreditoPago(Integer idCredito, Integer idPago) {
         return creditoPagoRepository.existsByCreditoIdCreditoAndPagoIdPago(idCredito, idPago);
+    }
+
+    @Override
+    public CreditoPagoResponse crearPagoCreditoSimple(Integer idCredito, Double monto, EnumMetodoPago metodoPago) {
+        Credito credito = creditoRepository.findById(idCredito)
+                .orElseThrow(() -> new NotFoundException("Crédito no encontrado con ID: " + idCredito));
+
+        // Validar que el crédito esté activo
+        if (credito.getEstado() != EnumEstadoCredito.ACTIVO) {
+            throw new RepeatedException("El crédito no está activo. Estado actual: " + credito.getEstado());
+        }
+        
+        // Validar que el monto del pago no exceda el saldo
+        if (monto > credito.getSaldo()) {
+            throw new RepeatedException("El monto del pago (" + monto + ") excede el saldo del crédito (" + credito.getSaldo() + ")");
+        }
+
+        // Crear el registro de pago
+        Pago pago = Pago.builder()
+                .monto(monto)
+                .metodoPago(metodoPago)
+                .build();
+
+        Pago savedPago = pagoRepository.save(pago);
+
+        CreditoPago creditoPago = CreditoPago.builder()
+                .credito(credito)
+                .pago(savedPago)
+                .monto(java.math.BigDecimal.valueOf(monto))
+                .build();
+
+        CreditoPago savedCreditoPago = creditoPagoRepository.save(creditoPago);
+        
+        // Actualizar el saldo del crédito
+        double nuevoSaldo = credito.getSaldo() - monto;
+        credito.setSaldo(nuevoSaldo);
+        
+        // Si el saldo es 0, cambiar el estado a PAGADO
+        if (nuevoSaldo <= 0) {
+            credito.setEstado(EnumEstadoCredito.PAGADO);
+            credito.setSaldo(0.0);
+        }
+        
+        creditoRepository.save(credito);
+        
+        return creditoPagoMapper.toResponse(savedCreditoPago);
     }
 }
