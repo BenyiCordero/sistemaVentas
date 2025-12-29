@@ -9,6 +9,5 @@ public record CreditoPagoResponse(
     Integer idPago,
     BigDecimal monto,
     LocalDateTime fecha,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime createdAt
 ) {}

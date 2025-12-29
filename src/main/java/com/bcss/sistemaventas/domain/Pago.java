@@ -15,9 +15,6 @@ public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPago;
-    @ManyToOne
-    @JoinColumn(name = "idCredito", referencedColumnName = "idCredito", nullable = false)
-    private Credito credito;
     @Column(nullable = false)
     private Double monto;
     @Enumerated(EnumType.STRING)
@@ -25,22 +22,16 @@ public class Pago {
     private EnumMetodoPago metodoPago;
     @Column(nullable = false)
     private LocalDateTime fechaPago;
-    @Column(length = 200)
-    private String notas;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tarjeta")
+    private Tarjeta tarjeta;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();
-        if (updatedAt == null) updatedAt = LocalDateTime.now();
         if (fechaPago == null) fechaPago = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }
