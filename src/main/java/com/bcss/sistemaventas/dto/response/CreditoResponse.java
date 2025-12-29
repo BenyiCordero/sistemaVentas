@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 public record CreditoResponse(
     Integer idCredito,
-    Integer idCliente,
-    String clienteNombre,
     Integer idVenta,
     Double montoInicial,
     Double saldo,

@@ -26,8 +26,7 @@ public class CreditoPagoMapper {
                 idPago,
                 creditoPago.getMonto(),
                 creditoPago.getFecha(),
-                creditoPago.getCreatedAt(),
-                creditoPago.getUpdatedAt()
+                creditoPago.getCreatedAt()
         );
     }
 
@@ -41,39 +40,6 @@ public class CreditoPagoMapper {
                 creditoPago.getCredito().getIdCredito(),
                 creditoPago.getMonto(),
                 creditoPago.getFecha()
-        );
-    }
-
-    public CreditoPagoDetailResponse toDetailResponse(CreditoPago creditoPago) {
-        if (creditoPago == null) {
-            return null;
-        }
-
-        Integer idPago = null;
-        if (creditoPago.getPago() != null) {
-            idPago = creditoPago.getPago().getIdPago();
-        }
-
-        CreditoBasicResponse creditoBasic = new CreditoBasicResponse(
-                creditoPago.getCredito().getIdCredito(),
-                creditoPago.getCredito().getMontoInicial(),
-                creditoPago.getCredito().getSaldo(),
-                creditoPago.getCredito().getTasaInteres(),
-                creditoPago.getCredito().getPlazoMeses(),
-                creditoPago.getCredito().getEstado().name(),
-                creditoPago.getCredito().getFechaInicio(),
-                creditoPago.getCredito().getFechaVencimiento()
-        );
-
-        return new CreditoPagoDetailResponse(
-                creditoPago.getId(),
-                creditoPago.getCredito().getIdCredito(),
-                idPago,
-                creditoPago.getMonto(),
-                creditoPago.getFecha(),
-                creditoPago.getCreatedAt(),
-                creditoPago.getUpdatedAt(),
-                creditoBasic
         );
     }
 }

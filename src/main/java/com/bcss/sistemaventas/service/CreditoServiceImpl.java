@@ -32,15 +32,6 @@ public class CreditoServiceImpl implements CreditoService {
 
     @Override
     public CreditoResponse crearCredito(CreditoRequest request) {
-        // Validar que el cliente exista
-        var cliente = clienteRepository.findById(request.idCliente())
-                .orElseThrow(() -> new NotFoundException("Cliente no encontrado con ID: " + request.idCliente()));
-
-        // Validar que el cliente no tenga un crédito activo
-        if (creditoRepository.existsByClienteIdClienteAndEstado(request.idCliente(), EnumEstadoCredito.ACTIVO)) {
-            throw new RepeatedException("El cliente ya tiene un crédito activo");
-        }
-
         // Validar que la venta exista si se proporcionó
         var venta = request.idVenta() != null ? 
                 ventaRepository.findById(request.idVenta())
@@ -51,7 +42,6 @@ public class CreditoServiceImpl implements CreditoService {
         LocalDate fechaVencimiento = LocalDate.now().plusMonths(request.plazoMeses());
 
         var credito = Credito.builder()
-                .cliente(cliente)
                 .venta(venta)
                 .montoInicial(request.montoInicial())
                 .saldo(request.montoInicial())
