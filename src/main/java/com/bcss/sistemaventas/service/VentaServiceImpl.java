@@ -167,9 +167,31 @@ public class VentaServiceImpl implements VentaService {
         return repository.save(venta);
     }
 
-    @Override
+@Override
     public Float getTotalVentasMes(Integer idSucursal) {
         return repository.sumTotalMesActual(idSucursal);
+    }
+
+    @Override
+    public Float getTotalVentasContadoMes(Integer idSucursal) {
+        return repository.sumTotalMesActualContado(idSucursal);
+    }
+
+    @Override
+    public Float getTotalVentasCreditoMes(Integer idSucursal) {
+        return repository.sumTotalMesActualCreditos(idSucursal);
+    }
+
+    @Override
+    public Float getTotalPagosCreditosMes(Integer idSucursal) {
+        return repository.sumPagosCreditosMesActual(idSucursal);
+    }
+
+    @Override
+    public Float getTotalIngresoMes(Integer idSucursal) {
+        Float contado = getTotalVentasContadoMes(idSucursal);
+        Float pagosCreditos = getTotalPagosCreditosMes(idSucursal);
+        return contado + pagosCreditos;
     }
 
 }

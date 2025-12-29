@@ -15,6 +15,26 @@ public interface VentaRepository extends JpaRepository<Venta, Integer> {
     List<Venta> findBySucursalIdSucursal(Integer id);
     List<Venta> findByTrabajadorIdUsuario(Integer id);
     List<Venta> findByClienteIdCliente(Integer id);
+@Query("""
+    SELECT COALESCE(SUM(v.totalVenta), 0)
+    FROM Venta v
+    WHERE v.sucursal.idSucursal = :idSucursal
+      AND MONTH(v.fechaVenta) = MONTH(CURRENT_DATE)
+      AND YEAR(v.fechaVenta) = YEAR(CURRENT_DATE)
+      AND v.metodoPago != 'CREDITO'
+""")
+    Float sumTotalMesActualContado(@Param("idSucursal") Integer idSucursal);
+
+    @Query("""
+    SELECT COALESCE(SUM(v.totalVenta), 0)
+    FROM Venta v
+    WHERE v.sucursal.idSucursal = :idSucursal
+      AND MONTH(v.fechaVenta) = MONTH(CURRENT_DATE)
+      AND YEAR(v.fechaVenta) = YEAR(CURRENT_DATE)
+      AND v.metodoPago = 'CREDITO'
+""")
+    Float sumTotalMesActualCreditos(@Param("idSucursal") Integer idSucursal);
+
     @Query("""
     SELECT COALESCE(SUM(v.totalVenta), 0)
     FROM Venta v
@@ -22,6 +42,16 @@ public interface VentaRepository extends JpaRepository<Venta, Integer> {
       AND MONTH(v.fechaVenta) = MONTH(CURRENT_DATE)
       AND YEAR(v.fechaVenta) = YEAR(CURRENT_DATE)
 """)
-    Float sumTotalMesActual(@Param("idSucursal") Integer idSucursal);
+Float sumTotalMesActual(@Param("idSucursal") Integer idSucursal);
+
+    @Query("""
+    SELECT COALESCE(SUM(cp.monto), 0)
+    FROM CreditoPago cp
+    JOIN cp.credito c
+    WHERE c.venta.sucursal.idSucursal = :idSucursal
+      AND MONTH(cp.fecha) = MONTH(CURRENT_DATE)
+      AND YEAR(cp.fecha) = YEAR(CURRENT_DATE)
+""")
+    Float sumPagosCreditosMesActual(@Param("idSucursal") Integer idSucursal);
 
 }

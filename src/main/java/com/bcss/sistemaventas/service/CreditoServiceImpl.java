@@ -5,7 +5,10 @@ import com.bcss.sistemaventas.dto.response.CreditoListResponse;
 import com.bcss.sistemaventas.dto.request.CreditoRequest;
 import com.bcss.sistemaventas.dto.request.EstadoCreditoRequest;
 import com.bcss.sistemaventas.domain.Credito;
+import com.bcss.sistemaventas.domain.Pago;
 import com.bcss.sistemaventas.domain.EnumEstadoCredito;
+import com.bcss.sistemaventas.domain.EnumMetodoPago;
+import com.bcss.sistemaventas.dto.request.CreditoPagoRequest;
 import com.bcss.sistemaventas.repository.CreditoRepository;
 import com.bcss.sistemaventas.repository.ClienteRepository;
 import com.bcss.sistemaventas.repository.VentaRepository;
@@ -25,10 +28,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class CreditoServiceImpl implements CreditoService {
 
-    private final CreditoRepository creditoRepository;
+private final CreditoRepository creditoRepository;
     private final ClienteRepository clienteRepository;
     private final VentaRepository ventaRepository;
     private final CreditoMapper creditoMapper;
+    private final CreditoPagoService creditoPagoService;
 
     @Override
     public CreditoResponse crearCredito(CreditoRequest request) {
@@ -52,11 +56,13 @@ public class CreditoServiceImpl implements CreditoService {
                 .fechaVencimiento(fechaVencimiento)
                 .build();
 
-        var savedCredito = creditoRepository.save(credito);
+var savedCredito = creditoRepository.save(credito);
         
-        // Actualizar el estado del cliente
-        cliente.setCreditoActivo(true);
-        clienteRepository.save(cliente);
+        // Actualizar el estado del cliente a través de la venta
+        if (venta != null && venta.getCliente() != null) {
+            venta.getCliente().setCreditoActivo(true);
+            clienteRepository.save(venta.getCliente());
+        }
 
         return creditoMapper.mapToResponse(savedCredito);
     }
@@ -78,10 +84,10 @@ public class CreditoServiceImpl implements CreditoService {
         return new CreditoListResponse(creditos);
     }
 
-    @Override
+@Override
     @Transactional(readOnly = true)
     public CreditoListResponse listarCreditosPorCliente(Integer idCliente) {
-        List<CreditoResponse> creditos = creditoRepository.findByClienteIdCliente(idCliente).stream()
+        List<CreditoResponse> creditos = creditoRepository.findByVentaClienteIdCliente(idCliente).stream()
                 .map(creditoMapper::mapToResponse)
                 .collect(Collectors.toList());
         return new CreditoListResponse(creditos);
@@ -110,10 +116,10 @@ public class CreditoServiceImpl implements CreditoService {
             EnumEstadoCredito nuevoEstado = EnumEstadoCredito.valueOf(request.estado().toUpperCase());
             credito.setEstado(nuevoEstado);
 
-            // Si se cancela el crédito, actualizar el estado del cliente
-            if (nuevoEstado == EnumEstadoCredito.CANCELADO) {
-                credito.getCliente().setCreditoActivo(false);
-                clienteRepository.save(credito.getCliente());
+// Si se cancela el crédito, actualizar el estado del cliente
+            if (nuevoEstado == EnumEstadoCredito.CANCELADO && credito.getVenta() != null && credito.getVenta().getCliente() != null) {
+                credito.getVenta().getCliente().setCreditoActivo(false);
+                clienteRepository.save(credito.getVenta().getCliente());
             }
 
             var updatedCredito = creditoRepository.save(credito);
@@ -136,12 +142,32 @@ public class CreditoServiceImpl implements CreditoService {
         var credito = creditoRepository.findById(idCredito)
                 .orElseThrow(() -> new NotFoundException("Crédito no encontrado con ID: " + idCredito));
 
-        // Actualizar el estado del cliente si el crédito estaba activo
-        if (credito.getEstado() == EnumEstadoCredito.ACTIVO) {
-            credito.getCliente().setCreditoActivo(false);
-            clienteRepository.save(credito.getCliente());
+// Actualizar el estado del cliente si el crédito estaba activo
+        if (credito.getEstado() == EnumEstadoCredito.ACTIVO && credito.getVenta() != null && credito.getVenta().getCliente() != null) {
+            credito.getVenta().getCliente().setCreditoActivo(false);
+            clienteRepository.save(credito.getVenta().getCliente());
         }
 
-        creditoRepository.delete(credito);
+creditoRepository.delete(credito);
+    }
+
+    @Override
+    public CreditoResponse procesarPagoCredito(Integer idCredito, Double monto, EnumMetodoPago metodoPago) {
+        creditoPagoService.crearPagoCreditoSimple(idCredito, monto, metodoPago);
+        return obtenerCreditoPorId(idCredito);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CreditoResponse> obtenerCreditosVencidosPorSucursal(Integer idSucursal) {
+        List<Credito> creditos = creditoRepository.findCreditosVencidos().stream()
+                .filter(credito -> credito.getVenta() != null && 
+                        credito.getVenta().getSucursal() != null && 
+                        credito.getVenta().getSucursal().getIdSucursal().equals(idSucursal))
+                .toList();
+        
+        return creditos.stream()
+                .map(creditoMapper::mapToResponse)
+                .collect(Collectors.toList());
     }
 }

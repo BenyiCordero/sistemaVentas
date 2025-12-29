@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface CreditoRepository extends JpaRepository<Credito, Integer> {
     
-    List<Credito> findByClienteIdCliente(Integer idCliente);
+List<Credito> findByEstado(EnumEstadoCredito estado);
     
-    List<Credito> findByEstado(EnumEstadoCredito estado);
+    List<Credito> findByVentaClienteIdCliente(Integer idCliente);
     
-    List<Credito> findByClienteIdClienteAndEstado(Integer idCliente, EnumEstadoCredito estado);
+    List<Credito> findByVentaClienteIdClienteAndEstado(Integer idCliente, EnumEstadoCredito estado);
     
     @Query("SELECT c FROM Credito c WHERE c.saldo > 0 AND c.estado = :estado")
     List<Credito> findCreditosActivosConSaldo(@Param("estado") EnumEstadoCredito estado);
@@ -27,5 +27,5 @@ public interface CreditoRepository extends JpaRepository<Credito, Integer> {
     
     Optional<Credito> findByVentaIdVenta(Integer idVenta);
     
-    boolean existsByClienteIdClienteAndEstado(Integer idCliente, EnumEstadoCredito estado);
+    boolean existsByVentaClienteIdClienteAndEstado(Integer idCliente, EnumEstadoCredito estado);
 }
