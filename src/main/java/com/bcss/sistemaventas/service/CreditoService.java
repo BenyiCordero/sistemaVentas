@@ -4,6 +4,7 @@ import com.bcss.sistemaventas.dto.response.CreditoResponse;
 import com.bcss.sistemaventas.dto.response.CreditoListResponse;
 import com.bcss.sistemaventas.dto.request.CreditoRequest;
 import com.bcss.sistemaventas.dto.request.EstadoCreditoRequest;
+import com.bcss.sistemaventas.domain.EnumMetodoPago;
 
 import java.util.List;
 
@@ -23,5 +24,9 @@ public interface CreditoService {
     
     List<CreditoResponse> obtenerCreditosVencidos();
     
+    List<CreditoResponse> obtenerCreditosVencidosPorSucursal(Integer idSucursal);
+    
     void eliminarCredito(Integer idCredito);
+    
+    CreditoResponse procesarPagoCredito(Integer idCredito, Double monto, EnumMetodoPago metodoPago);
 }

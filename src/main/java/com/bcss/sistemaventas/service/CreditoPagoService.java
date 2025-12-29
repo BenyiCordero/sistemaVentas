@@ -4,6 +4,7 @@ import com.bcss.sistemaventas.dto.response.CreditoPagoResponse;
 import com.bcss.sistemaventas.dto.response.CreditoPagoListResponse;
 import com.bcss.sistemaventas.dto.response.CreditoPagoDetailResponse;
 import com.bcss.sistemaventas.dto.request.CreditoPagoRequest;
+import com.bcss.sistemaventas.domain.EnumMetodoPago;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public interface CreditoPagoService {
     
     CreditoPagoResponse crearCreditoPago(CreditoPagoRequest request);
+    
+    CreditoPagoResponse crearPagoCreditoSimple(Integer idCredito, Double monto, EnumMetodoPago metodoPago);
     
     CreditoPagoResponse obtenerCreditoPagoPorId(Integer id);
     
