@@ -43,5 +43,7 @@ public class Venta {
     private String notas;
     @Column(nullable = false)
     private String metodoPago;
+    @Column(nullable = false)
+    private String tipoVenta;
 }
 
